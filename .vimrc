@@ -12,13 +12,25 @@ let g:pathogen_disabled = []
 " e.g. like this:
 " call add(g:pathogen_disabled, 'csscolor')
 "call add(g:pathogen_disabled, 'gitignore')
+"call add(g:pathogen_disabled, 'command-t')
+call add(g:pathogen_disabled, 'ctrlp.vim')
+call add(g:pathogen_disabled, 'omnisharp-vim')
 execute pathogen#infect()
 syntax on
 filetype plugin indent on
 call pathogen#helptags()
 
+" Command-T
 let g:CommandTTraverseSCM = 'pwd'
 let g:CommandTWildIgnore=&wildignore . ",*.png,*.jpg,*.wav,*.jar,*.tga,*.md,*.mobileprovision,*.meta,*.replay,*.track,*.prefab"
+
+" ctrlp
+"let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
+"let g:ctrlp_working_path_mode = 'ra'
+
+" OmniSharp
+"let g:OmniSharp_selector_ui = 'ctrlp'  " Use ctrlp.vim
+
 
 " Solarized
 "syntax enable
@@ -32,8 +44,8 @@ let g:gruvbox_italic=0
 let g:gruvbox_contrast_dark='soft'
 colorscheme gruvbox
 
+set list
 set cursorline
-
 " Line numbers
 set number
 
@@ -235,46 +247,9 @@ xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
-"function! Git_Repo_Cdup() " Get the relative path to repo root
-"    "Ask git for the root of the git repo (as a relative '../../' path)
-"    let git_top = system('git rev-parse --show-cdup')
-"    let git_fail = 'fatal: Not a git repository'
-"    if strpart(git_top, 0, strlen(git_fail)) == git_fail
-"        " Above line says we are not in git repo. Ugly. Better version?
-"        return ''
-"    else
-"        " Return the cdup path to the root. If already in root,
-"        " path will be empty, so add './'
-"        return './' . git_top
-"    endif
-"endfunction
-"
-"function! CD_Git_Root()
-"    execute 'cd '.Git_Repo_Cdup()
-"    let curdir = getcwd()
-"    echo 'CWD now set to: '.curdir
-"endfunction
-"nnoremap <LEADER>gr :call CD_Git_Root()<cr>
-"
-"" Define the wildignore from gitignore. Primarily for CommandT
-"function! WildignoreFromGitignore()
-"	let gitignore = '.gitignore'
-"	if filereadable(gitignore)
-"		let igstring = ''
-"		for oline in readfile(gitignore)
-"			let line = substitute(oline, '\s|\n|\r', '', "g")
-"			if line =~ '^#' | con | endif
-"			if line == '' | con  | endif
-"			if line =~ '^!' | con  | endif
-"			if line =~ '/$' | let igstring .= "," . line . "*" | con | endif
-"			let igstring .= "," . line
-"		endfor
-"		let execstring = "set wildignore=".substitute(igstring,'^,','',"g")
-"		execute execstring
-"		echo 'Wildignore defined from gitignore in: '.getcwd()
-"	else
-"		echo 'Unable to find gitignore'
-"	endif
-"endfunction
-"nnoremap <LEADER>cti :call WildignoreFromGitignore()<cr>
-"nnoremap <LEADER>cwi :set wildignore=''<cr>:echo 'Wildignore cleared'<cr>
+" Auto-save session (vim-session)
+let g:session_autosave='yes'
+
+" Don't let cursorline highlight visible whitespace
+call matchadd("NonText", '^\s\+')
+call matchadd("NonText", '\s\+$')
